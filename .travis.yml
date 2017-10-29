@@ -6,7 +6,7 @@ env:
   global:
   - PIP_RETRIES=10
   - PIP_TIMEOUT=30
-  - BROWSER=phantomjs
+  - BROWSER=chrome
   matrix:
   - TOXENV=checkqa
   - TOXENV=base-py35-django20-sqlite
@@ -25,6 +25,12 @@ before_script:
   fi
 - if echo "$TOXENV" | grep postgresql; then psql -c 'create database autocomplete_light_test;'
   -U postgres; fi
+- wget -N http://chromedriver.storage.googleapis.com/2.30/chromedriver_linux64.zip -P ~/
+- unzip ~/chromedriver_linux64.zip -d ~/
+- rm ~/chromedriver_linux64.zip
+- sudo mv -f ~/chromedriver /usr/local/share/
+- sudo chmod +x /usr/local/share/chromedriver
+- sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
 - set -eux;
   export PHANTOMJS_VERSION=2.1.1;
   phantomjs --version;
@@ -45,6 +51,7 @@ before_script:
   phantomjs --version;
   set +eu
 script:
+- whereis chromedriver
 - tox -r
 - test -d .tox/$TOXENV/log && cat .tox/$TOXENV/log/*.log || true
 after_success:
