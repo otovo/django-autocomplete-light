@@ -6,10 +6,12 @@ env:
   global:
   - PIP_RETRIES=10
   - PIP_TIMEOUT=30
-  - BROWSER=chrome
+  - BROWSER=firefox
   matrix:
   - TOXENV=checkqa
   - TOXENV=base-py35-django20-sqlite
+addons:
+  firefox: "45.4.0esr"
 matrix:
   allow_failures:
   - env: TOXENV=base-py35-djangomaster-sqlite
@@ -21,35 +23,10 @@ before_script:
 - "export DISPLAY=:99.0"
 - "sh -e /etc/init.d/xvfb start"
 - sleep 3 # give xvfb some time to start
-- if echo "$TOXENV" | grep mysql; then mysql -e 'create database autocomplete_light_test;';
-  fi
-- if echo "$TOXENV" | grep postgresql; then psql -c 'create database autocomplete_light_test;'
-  -U postgres; fi
-- wget -N http://chromedriver.storage.googleapis.com/2.30/chromedriver_linux64.zip -P ~/
-- unzip ~/chromedriver_linux64.zip -d ~/
-- rm ~/chromedriver_linux64.zip
-- sudo mv -f ~/chromedriver /usr/local/share/
-- sudo chmod +x /usr/local/share/chromedriver
-- sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
-- set -eux;
-  export PHANTOMJS_VERSION=2.1.1;
-  phantomjs --version;
-  export PATH=$HOME/travis_phantomjs/phantomjs-$PHANTOMJS_VERSION-linux-x86_64/bin:$PATH;
-  phantomjs --version;
-  if [ "$(phantomjs --version)" != "$PHANTOMJS_VERSION" ]; then
-    rm -rf $HOME/travis_phantomjs;
-    mkdir -p $HOME/travis_phantomjs;
-    if [ ! -f $HOME/travis_phantomjs/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2 ]; then
-      travis_retry wget
-        https://github.com/Medium/phantomjs/releases/download/v$PHANTOMJS_VERSION/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2
-        -O $HOME/travis_phantomjs/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2;
-    fi;
-    tar -xvf
-      $HOME/travis_phantomjs/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2
-      -C $HOME/travis_phantomjs;
-  fi;
-  phantomjs --version;
-  set +eu
+- wget https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz
+- mkdir geckodriver
+- tar -xzf geckodriver-v0.11.1-linux64.tar.gz -C geckodriver
+- export PATH=$PATH:$PWD/geckodriver
 script:
 - whereis chromedriver
 - tox -r
