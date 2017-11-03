@@ -7,7 +7,7 @@
 .. image:: https://codecov.io/github/yourlabs/django-autocomplete-light/coverage.svg?branch=master
     :target: https://codecov.io/github/yourlabs/django-autocomplete-light?branch=master
 
-Note: This is just a fork of [yourlabs/django-autocomplete-light] with 
+Note: This is just a fork of [yourlabs/django-autocomplete-light](https://github.com/yourlabs/django-autocomplete-light) with 
 [PR#876](https://github.com/yourlabs/django-autocomplete-light/pull/876) merged.
 
 Features
