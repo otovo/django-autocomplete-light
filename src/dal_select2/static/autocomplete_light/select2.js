@@ -72,7 +72,7 @@
         var ajax = null;
         if ($(this).attr('data-autocomplete-light-url')) {
             ajax = {
-                url: $(this).attr('data-autocomplete-light-url'),
+                url: function () { return element.attr('data-autocomplete-light-url'); },
                 dataType: 'json',
                 delay: 250,
 
